@@ -1,4 +1,4 @@
-name: CI/CD Pipeline - Wisecow
+name: CI/CD
 
 on:
   push:
@@ -7,7 +7,7 @@ on:
     branches: [ "main" ]
 
 jobs:
-  build-and-push:
+  build:
     runs-on: ubuntu-latest
 
     steps:
@@ -21,11 +21,8 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Set image ID (lowercase)
-        id: prep
-        run: |
-          IMAGE_ID=ghcr.io/${{ github.repository_owner }}/wisecow:latest
-          echo "IMAGE_ID=$(echo $IMAGE_ID | tr '[:upper:]' '[:lower:]')" >> $GITHUB_ENV
+      - name: Set image ID
+        run: echo "IMAGE_ID=ghcr.io/shreyanshbhalla/wisecow:latest" >> $GITHUB_ENV
 
       - name: Build Docker image
         run: docker build -t $IMAGE_ID .
