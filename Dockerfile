@@ -1,20 +1,19 @@
-# Use an official Python runtime as a parent image
-FROM python:3.9-slim
+# Use a lightweight Debian base image
+FROM debian:bullseye-slim
 
-# Set the working directory in the container
+# Install dependencies: fortune-mod, cowsay, and netcat
+RUN apt-get update && \
+    apt-get install -y fortune-mod cowsay netcat-openbsd && \
+    rm -rf /var/lib/apt/lists/*
+
+# Set working directory
 WORKDIR /app
 
-# Copy the current directory contents into the container at /app
-COPY . /app
+# Copy application files into container
+COPY wisecow.sh .
 
-# Install any needed packages specified in requirements.txt
-RUN pip install --no-cache-dir -r requirements.txt
+# Make port 4499 available outside the container
+EXPOSE 4499
 
-# Make port 5000 available to the world outside this container
-EXPOSE 5000
-
-# Define environment variable
-ENV FLASK_APP=app.py
-
-# Run the application
-CMD ["python", "-m", "flask", "run", "--host=0.0.0.0"]
+# Run the wisecow server
+CMD ["./wisecow.sh"]
