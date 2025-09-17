@@ -29,7 +29,7 @@ jobs:
           echo "IMAGE_LATEST=ghcr.io/shreyanshbhalla/wisecow:latest" >> $GITHUB_ENV
           echo "IMAGE_SHA=ghcr.io/shreyanshbhalla/wisecow:${GITHUB_SHA::8}" >> $GITHUB_ENV
 
-      # 4. Build and push Docker image (with caching & multi-arch)
+      # 4. Build and push Docker image (single platform: linux/amd64)
       - name: Build and Push Docker image
         uses: docker/build-push-action@v5
         with:
@@ -38,7 +38,7 @@ jobs:
           tags: ${{ env.IMAGE_LATEST }},${{ env.IMAGE_SHA }}
           cache-from: type=registry,ref=${{ env.IMAGE_LATEST }}
           cache-to: type=inline
-          platforms: linux/amd64,linux/arm64
+          platforms: linux/amd64
 
       # 5. Optional: verify pushed image
       - name: Verify pushed image
