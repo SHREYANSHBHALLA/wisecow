@@ -7,26 +7,39 @@ on:
     branches: [ "main" ]
 
 jobs:
-  build:
+  build-and-push:
     runs-on: ubuntu-latest
 
     steps:
+      # 1. Checkout the repository
       - name: Checkout repository
         uses: actions/checkout@v3
 
+      # 2. Log in to GitHub Container Registry
       - name: Log in to GitHub Container Registry
         uses: docker/login-action@v2
         with:
           registry: ghcr.io
           username: ${{ github.actor }}
           password: ${{ secrets.CR_PAT }}
-          
 
-      - name: Set image ID
-        run: echo "IMAGE_ID=ghcr.io/shreyanshbhalla/wisecow:latest" >> $GITHUB_ENV
+      # 3. Set image tags
+      - name: Set image tags
+        run: |
+          echo "IMAGE_LATEST=ghcr.io/shreyanshbhalla/wisecow:latest" >> $GITHUB_ENV
+          echo "IMAGE_SHA=ghcr.io/shreyanshbhalla/wisecow:${GITHUB_SHA::8}" >> $GITHUB_ENV
 
-      - name: Build Docker image
-        run: docker build -t $IMAGE_ID .
+      # 4. Build and push Docker image (with caching & multi-arch)
+      - name: Build and Push Docker image
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          push: true
+          tags: ${{ env.IMAGE_LATEST }},${{ env.IMAGE_SHA }}
+          cache-from: type=registry,ref=${{ env.IMAGE_LATEST }}
+          cache-to: type=inline
+          platforms: linux/amd64,linux/arm64
 
-      - name: Push Docker image
-        run: docker push $IMAGE_ID
+      # 5. Optional: verify pushed image
+      - name: Verify pushed image
+        run: docker pull ${{ env.IMAGE_SHA }}
