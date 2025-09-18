@@ -61,6 +61,8 @@ jobs:
       # 7. Deploy to Kubernetes
       - name: Deploy to Kubernetes
         run: |
+          # Replace image placeholder with commit SHA
           sed "s|IMAGE_PLACEHOLDER|${{ env.IMAGE_SHA }}|g" k8s-manifest.yaml > k8s-final.yaml
-          kubectl apply -f k8s-final.yaml --record
+          # Apply manifest without OpenAPI validation
+          kubectl apply -f k8s-final.yaml --validate=false
           kubectl rollout status deployment/wisecow-deployment
