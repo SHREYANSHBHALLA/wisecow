@@ -16,10 +16,9 @@ spec:
     spec:
       containers:
       - name: wisecow
-        image: image: ghcr.io/shreyanshbhalla/wisecow:latest
-
+        image: ghcr.io/shreyanshbhalla/wisecow:latest
         ports:
-        - containerPort: 5000
+        - containerPort: 4499
 ---
 apiVersion: v1
 kind: Service
@@ -31,18 +30,12 @@ spec:
   ports:
     - protocol: TCP
       port: 80
-      targetPort: 5000
+      targetPort: 4499
   type: LoadBalancer
 ---
-apiVersion: v1
-kind: Secret
-metadata:
-  name: tls-secret
-  namespace: default
-type: kubernetes.io/tls
-data:
-  tls.crt: cat tls.crt | base64 -w0
-  tls.key: cat tls.key | base64 -w0
+# ⚠️ Do NOT paste certs here
+# Instead create with kubectl:
+# kubectl create secret tls tls-secret --cert=tls.crt --key=tls.key
 ---
 apiVersion: networking.k8s.io/v1
 kind: Ingress
