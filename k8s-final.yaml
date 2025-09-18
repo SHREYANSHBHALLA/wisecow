@@ -23,7 +23,7 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: wisecow-service
+  name: wisecow-service 
 spec:
   selector:
     app: wisecow
