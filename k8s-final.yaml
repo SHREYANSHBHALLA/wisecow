@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
         - name: wisecow
-          image: "ghcr.io/shreyanshbhalla/wisecow:dde0c3f5"
+          image: ghcr.io/shreyanshbhalla/wisecow:dde0c3f5
           ports:
             - containerPort: 4499
       imagePullSecrets:
