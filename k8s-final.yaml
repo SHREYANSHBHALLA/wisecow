@@ -16,10 +16,11 @@ spec:
     spec:
       containers:
       - name: wisecow
-        image: "ghcr.io/shreyanshbhalla/wisecow:latest"
-
+        image: "IMAGE_PLACEHOLDER"
         ports:
         - containerPort: 4499
+      imagePullSecrets:
+        - name: ghcr-secret
 ---
 apiVersion: v1
 kind: Service
