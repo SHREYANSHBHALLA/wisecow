@@ -15,10 +15,10 @@ spec:
         app: wisecow
     spec:
       containers:
-      - name: wisecow
-        image: "IMAGE_PLACEHOLDER"
-        ports:
-        - containerPort: 4499
+        - name: wisecow
+          image: "ghcr.io/shreyanshbhalla/wisecow:9b4d9e23"
+          ports:
+            - containerPort: 4499
       imagePullSecrets:
         - name: ghcr-secret
 ---
@@ -47,17 +47,17 @@ metadata:
     nginx.ingress.kubernetes.io/ssl-redirect: "true"
 spec:
   tls:
-  - hosts:
-      - wisecow.local
-    secretName: tls-secret
+    - hosts:
+        - wisecow.local
+      secretName: tls-secret
   rules:
-  - host: wisecow.local
-    http:
-      paths:
-      - path: /
-        pathType: Prefix
-        backend:
-          service:
-            name: wisecow-service
-            port:
-              number: 80
+    - host: wisecow.local
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: wisecow-service
+                port:
+                  number: 80
