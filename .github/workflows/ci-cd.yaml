@@ -58,7 +58,7 @@ jobs:
           mkdir -p $HOME/.kube
           echo "${{ secrets.KUBECONFIG_B64 }}" | base64 --decode > $HOME/.kube/config
 
-      # 7. Deploy to Kubernetes with new image
+      # 7. Deploy to Kubernetes with new image 
       - name: Deploy to Kubernetes
         run: |
           sed "s|IMAGE_PLACEHOLDER|${{ env.IMAGE_SHA }}|g" k8s-manifest.yaml > k8s-final.yaml
